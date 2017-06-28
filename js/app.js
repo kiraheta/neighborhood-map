@@ -6,3 +6,10 @@ function initMap() {
     zoom: 12
   });
 }
+
+// Defines the data and behavior of UI
+function AppViewModel() {
+}
+
+// Activate knockout.js
+ko.applyBindings(new AppViewModel());
