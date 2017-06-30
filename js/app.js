@@ -1,23 +1,22 @@
-// Create a new blank array for all the listing markers.
 var map;
 var markers = [];
 var locations = [
-          {title: 'Griffith Park', location: {lat: 34.136555, lng: -118.294197}},
-          {title: 'Hollywood Bowl', location: {lat: 34.112224, lng: -118.339128}},
-          {title: 'TCL Chinese Theatre', location: {lat: 34.102023, lng: -118.340971}},
-          {title: 'Runyon Canyon Park ', location: {lat: 34.110681, lng: -118.350378}},
-          {title: 'LACMA', location: {lat: 34.063932, lng: -118.359229}}
-        ];
+  {title: 'Griffith Park', location: {lat: 34.136555, lng: -118.294197}},
+  {title: 'Hollywood Bowl', location: {lat: 34.112224, lng: -118.339128}},
+  {title: 'TCL Chinese Theatre', location: {lat: 34.102023, lng: -118.340971}},
+  {title: 'Runyon Canyon Park ', location: {lat: 34.110681, lng: -118.350378}},
+  {title: 'LACMA', location: {lat: 34.063932, lng: -118.359229}}
+];
 
 function initMap() {
   // Constructor creates a new map - only center and zoom are required.
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 34.05223, lng: -118.24368},
-    zoom: 12
+    zoom: 12,
+    mapTypeControl: false
   });
-
+  // Creates infowindow object for a marker to display info
   var largeInfowindow = new google.maps.InfoWindow();
-  var bounds = new google.maps.LatLngBounds();
 
   // Uses the location array to create an array of markers on initialize.
   for (var i = 0; i < locations.length; i++) {
@@ -38,10 +37,27 @@ function initMap() {
     marker.addListener('click', function() {
       populateInfoWindow(this, largeInfowindow);
     });
+  }
+}
+
+// This function will loop through the markers array and display them all.
+function showListings() {
+  // Limits the map to display all the locations on the screen
+  var bounds = new google.maps.LatLngBounds();
+  // Extend the boundaries of the map for each marker and display the marker
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
     bounds.extend(markers[i].position);
   }
   // Extend the boundaries of the map for each marker
   map.fitBounds(bounds);
+}
+
+// This function will loop through the listings and hide them all.
+function hideListings() {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
 }
 
 // This function populates the infowindow when the marker is clicked. We'll only allow
