@@ -115,6 +115,11 @@ function makeMarkerIcon(markerColor) {
   return markerImage;
 }
 
+// Handle Google Maps API error
+function googleMapsError() {
+	alert("Google Maps failed to load. Please try again.");
+}
+
 // Defines the data and behavior of UI
 function AppViewModel() {
 }
