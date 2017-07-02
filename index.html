@@ -1,44 +1,52 @@
-<!DOCTYPE html>
+<!DOCTYPE>
 <html lang="en">
   <head>
     <title>Neighborhood Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="author" content="Kenny Iraheta">
     <meta name="description" content="A neighborhood map">
-    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
   </head>
 
   <body>
 
     <div class="container-fluid">
-      <div id="left-sidebar">
+      <div class="row-fluid">
+          <div class="col-sm-3 col-xs-12 sidenav text-center">
 
-        <div class="options-box">
-          <h1>Los Angeles Neighborhood</h1><hr>
-          <div >
-            <input id="show-listings" class="listing" type="button"
-            value="Show Listings" data-bind="click:showListings">
-            <input id="hide-listings" class="listing" type="button"
-            value="Hide Listings" data-bind="click:hideListings">
+            <h1>Los Angeles Neighborhood</h1><hr>
+
+            <div class="listings">
+              <input id="show-listings" class="listing" type="button"
+              value="Show Listings" data-bind="click:showListings">
+              <input id="hide-listings" class="listing" type="button"
+              value="Hide Listings" data-bind="click:hideListings">
+            </div>
+
+            <div id="search-box" class="inner-addon left-addon">
+              <i class="glyphicon glyphicon-search"></i>
+              <input id="search-field" class="form-control" type="search"
+              name="search" placeholder="Select a place from below..."/><br>
+            </div>
+
+            <div id="search-list" class="text-left">
+              <ul data-bind="foreach: locationList">
+                <li class="search-list-item" data-bind="text: title"></li><br>
+              </ul>
+            </div>
+
           </div>
-        </div>
-
-        <div id="search-box" class="inner-addon left-addon">
-          <i class="glyphicon glyphicon-search"></i>
-          <input id="search-field" class="form-control" type="search"
-          name="search" placeholder="Select an address from below..."/>
-        </div>
-
-       </div>
+          <div class="map col-sm-9 col-xs-8">
+            <div id="map"></div>
+          </div>
       </div>
-
-    <div id="map"></div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRvjAqg8eyVZjXBKjcn6sFprPIH-f-hfk&callback=initMap"
     async defer onerror="googleMapsError()"></script>
