@@ -3,10 +3,10 @@ var markers = [];
 var locations = [
   {title: 'Griffith Park', location: {lat: 34.136555, lng: -118.294197}},
   {title: 'Hollywood Bowl', location: {lat: 34.112224, lng: -118.339128}},
-  {title: 'Hollywood Sign', location: {lat: 34.134073, lng: -118.321548}},
-  {title: 'TCL Chinese Theatre', location: {lat: 34.102023, lng: -118.340971}},
+  {title: 'Griffith Observatory', location: {lat: 34.1185357, lng: -118.30044580000003}},
+  {title: 'Grauman\'s Chinese Theatre', location: {lat: 34.102023, lng: -118.340971}},
   {title: 'Runyon Canyon Park ', location: {lat: 34.110681, lng: -118.350378}},
-  {title: 'LACMA', location: {lat: 34.063932, lng: -118.359229}}
+  {title: 'Los Angeles County Museum of Art', location: {lat: 34.063932, lng: -118.359229}}
 ];
 var largeInfoWindow;
 
@@ -76,7 +76,8 @@ function populateInfoWindow(marker, infoWindow){
   makeMarkerBounce(marker);
   if(infoWindow.marker != marker){
     infoWindow.marker = marker;
-    infoWindow.setContent('<div class="location-title">' + marker.title);
+    infoWindow.setContent('');
+    callWiki(marker);
     infoWindow.open(map,marker);
     infoWindow.addListener('closeclick', function(){
       infoWindow.marker = null;
@@ -118,6 +119,39 @@ function getLocation(value){
 // Handle Google Maps API error
 function googleMapsError() {
   alert("Google Maps failed to load. Please try again.");
+}
+
+// Handle Wiki API error
+function wikiApiError() {
+  alert("Wiki failed to retrieve data. Please try again.");
+}
+
+// Get photo from Wikipedia
+function callWiki (marker){
+
+  // API constants
+  var API_HOST = 'https://en.wikipedia.org/w/api.php?'
+  var SEARCH_PATH = 'action=query&format=json&formatversion=2&prop=pageimages|pageterms&piprop=original&titles='
+
+  var url = API_HOST + SEARCH_PATH + marker.title;
+
+  $.ajax({
+          url: url,
+          dataType: "jsonp"
+        }).done(function(response){
+
+          var wikiDoc = response.query.pages[0].original.source;
+          var url = '<div class="location-title"><center><h3>' + marker.title +
+          '</center></h3></div><br>' + '<div class="location-image">' +
+          '<center><img src="' + wikiDoc +
+           '" height="180" width="220"></center>' + '</div><br>';
+
+          //Set content with InfoWindow
+          largeInfoWindow.setContent(url);
+          showListings();
+        }).fail(function(){
+          wikiApiError();
+        });
 }
 
 // Defines the data and behavior of UI

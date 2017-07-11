@@ -101,6 +101,10 @@ input[type="button"] {
   color: white;
 }
 
+.location-title {
+  color: #ff6347;
+}
+
 @media (max-width: 576px) {
 
   .sidenav {
