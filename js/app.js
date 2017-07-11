@@ -27,11 +27,11 @@ function initMap() {
   // mouses over the marker.
   var highlightedIcon = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
 
-  // Uses the location array to create an array of markers on initialize.
-  for (var i = 0; i < locations.length; i++){
+  // Uses the locations array to create an array of markers on initialize.
+  locations.forEach(function(location, index) {
     // Get the position from the location array.
-    var position = locations[i].location;
-    var title = locations[i].title;
+     var position = locations[index].location;
+     var title = locations[index].title;
 
     // Create a marker per location, and put into markers array.
     var marker = new google.maps.Marker({
@@ -39,7 +39,8 @@ function initMap() {
       title: title,
       animation: google.maps.Animation.DROP,
       icon: defaultIcon,
-      id: i
+      id: index,
+      map: map
     });
 
     // Push the marker to our array of markers.
@@ -59,7 +60,7 @@ function initMap() {
     marker.addListener('mouseout', function(){
       this.setIcon(defaultIcon);
     });
-  }
+  });
   showListings();
 }
 
