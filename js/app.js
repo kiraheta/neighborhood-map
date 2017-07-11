@@ -132,10 +132,10 @@ function wikiApiError() {
 function getWikiData(marker) {
 
   // API constants
-  var API_HOST = 'https://en.wikipedia.org/w/api.php?'
-  var SEARCH_PATH_1 = 'action=opensearch&search='
-  var CB = '&format=json&callback=wikiCallback'
-  var SEARCH_PATH_2 = 'action=query&format=json&formatversion=2&prop=pageimages|pageterms&piprop=original&titles='
+  var API_HOST = 'https://en.wikipedia.org/w/api.php?';
+  var SEARCH_PATH_1 = 'action=opensearch&search=';
+  var CB = '&format=json&callback=wikiCallback';
+  var SEARCH_PATH_2 = 'action=query&format=json&formatversion=2&prop=pageimages|pageterms&piprop=original&titles=';
 
   var url = API_HOST + SEARCH_PATH_1 + marker.title + CB;
   var url2 = API_HOST + SEARCH_PATH_2 + marker.title;
@@ -204,7 +204,7 @@ var appViewModel = {
         appViewModel.locationList.push(locations[l]);
         var knockoutMarker = locations[l].location;
 
-        for (var i = 0; i < markers.length; i++) {
+        for (i = 0; i < markers.length; i++) {
           if (markers[i].position.lat().toFixed(5) == knockoutMarker.lat.toFixed(5) &&
               markers[i].position.lng().toFixed(5) == knockoutMarker.lng.toFixed(5)) {
                 markers[i].setVisible(true);
