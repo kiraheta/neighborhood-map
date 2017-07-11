@@ -9,6 +9,8 @@ var locations = [
   {title: 'Los Angeles County Museum of Art', location: {lat: 34.063932, lng: -118.359229}}
 ];
 var largeInfoWindow;
+var linkContent;
+var imgContent;
 
 function initMap() {
   // Constructor creates a new map - only center and zoom are required.
@@ -77,7 +79,7 @@ function populateInfoWindow(marker, infoWindow){
   if(infoWindow.marker != marker){
     infoWindow.marker = marker;
     infoWindow.setContent('');
-    callWiki(marker);
+    getWikiData(marker);
     infoWindow.open(map,marker);
     infoWindow.addListener('closeclick', function(){
       infoWindow.marker = null;
@@ -126,33 +128,56 @@ function wikiApiError() {
   alert("Wiki failed to retrieve data. Please try again.");
 }
 
-// Get photo from Wikipedia
-function callWiki (marker){
+// Get link & photo  from Wikipedia
+function getWikiData(marker) {
 
   // API constants
-  var API_HOST = 'https://en.wikipedia.org/w/api.php?'
-  var SEARCH_PATH = 'action=query&format=json&formatversion=2&prop=pageimages|pageterms&piprop=original&titles='
+    var API_HOST = 'https://en.wikipedia.org/w/api.php?'
+    var SEARCH_PATH_1 = 'action=opensearch&search='
+    var CB = '&format=json&callback=wikiCallback'
+    var SEARCH_PATH_2 = 'action=query&format=json&formatversion=2&prop=pageimages|pageterms&piprop=original&titles='
 
-  var url = API_HOST + SEARCH_PATH + marker.title;
+    var url = API_HOST + SEARCH_PATH_1 + marker.title + CB;
+    var url2 = API_HOST + SEARCH_PATH_2 + marker.title;
 
-  $.ajax({
-          url: url,
-          dataType: "jsonp"
-        }).done(function(response){
+    $.ajax({
+            url: url,
+            dataType: "jsonp"
+          }).done(function(response){
 
-          var wikiDoc = response.query.pages[0].original.source;
-          var url = '<div class="location-title"><center><h3>' + marker.title +
-          '</center></h3></div><br>' + '<div class="location-image">' +
-          '<center><img src="' + wikiDoc +
-           '" height="180" width="220"></center>' + '</div><br>';
+            var wikiDoc = response[3][0];
+            linkContent = '<div>' + '<center><h3>' +
+            '<a href ="' + wikiDoc +
+             '" class="location-title" target="_blank">' +
+             marker.title +'</a></h3></center></div>';
 
-          //Set content with InfoWindow
-          largeInfoWindow.setContent(url);
-          showListings();
-        }).fail(function(){
-          wikiApiError();
-        });
-}
+          }).fail(function(){
+            wikiApiError();
+          });
+
+    var timeDelay = 70;
+    setTimeout(secondAJAXCall, timeDelay);
+
+    function secondAJAXCall() {
+
+      $.ajax({
+              url: url2,
+              dataType: "jsonp"
+            }).done(function(response){
+
+              var wikiDoc2 = response.query.pages[0].original.source;
+              imgContent = '<div class="location-image">' +
+              '<center><img src="' + wikiDoc2 +
+               '" height="180" width="220"></center>' + '</div><br>';
+
+              //Set content with InfoWindow
+               largeInfoWindow.setContent(linkContent + imgContent);
+               showListings();
+            }).fail(function(){
+              wikiApiError();
+            });
+    }
+  }
 
 // Defines the data and behavior of UI
 var appViewModel = {
